@@ -69,15 +69,22 @@
   </div>
 </div>
 
-<div class="section-header orange">📋 衡阳各站点达成情况（完整数据）</div>
+<div class="section-header green">📅 各站点日维度数据</div>
 <div class="card">
+  <div style="display:flex;align-items:center;gap:12px;padding:12px 0;flex-wrap:wrap">
+    <label style="font-weight:600;color:#1a5276;font-size:14px">选择站点：</label>
+    <select id="stationSelect" onchange="showDaily()" style="padding:8px 14px;border:2px solid #2980b9;border-radius:6px;font-size:14px;background:white;min-width:300px;cursor:pointer">
+    </select>
+    <span id="dailyHint" style="font-size:13px;color:#888"></span>
+  </div>
+  <div class="kpi-row" id="dailyKpiRow"></div>
   <div class="table-wrap">
-    <table id="fullTable">
+    <table id="dailyTable">
       <thead><tr>
-        <th>站点</th><th>日均订单</th><th>妥投率</th><th>物流责未妥投率</th><th>用户T准时率</th><th>不完美订单率</th>
+        <th>日期</th><th>当日订单</th><th>妥投率</th><th>物流责未妥投率</th><th>用户T准时率</th><th>不完美订单率</th>
         <th>实际T时长</th><th>调度时长</th><th>配送时长</th><th>接单时长</th><th>到店时长</th><th>取餐时长</th><th>送达时长</th><th>确认时长</th>
       </tr></thead>
-      <tbody id="fullBody"></tbody>
+      <tbody id="dailyBody"></tbody>
     </table>
   </div>
 </div>
@@ -99,6 +106,9 @@ const mtdData = [
   ['立新站',9,0.888889,0.0,0.666667,8.8333,21.86,3.03,21.84,0.0,6.04,0.2,12.57,0.02],
   ['衡阳合并经营',11953,0.990379,0.000251,0.938919,0.0671,43.28,8.56,43.12,0.355,2.89,10.02,21.64,0.02],
 ];
+const dailyData = {
+  '珠晖师范学院新校区站（聚合送）': [[20260901,452,0.9956,0.0,0.9802,0.0088,41.5,11.44,41.15,0.048,1.52,14.15,13.99,2.03], [20260902,655,0.9909,0.0,0.9592,0.0227,44.18,12.13,44.16,0.043,1.59,15.76,14.54,1.78], [20260903,888,0.9911,0.0,0.9821,0.014,41.66,12.27,41.7,0.061,1.26,12.99,15.08,1.55], [20260904,1257,0.9898,0.0,0.9315,0.0205,45.76,12.37,45.92,0.034,1.66,15.21,16.56,1.67], [20260905,2002,0.9896,0.0,0.9733,0.0119,42.56,12.82,42.52,0.029,1.18,20.3,8.09,1.43], [20260906,2943,0.9902,0.0,0.963,0.0188,41.81,13.68,41.67,0.037,1.53,19.34,7.0,1.57], [20260907,2960,0.99,0.0013,0.9224,0.0341,43.32,14.34,43.32,0.04,1.86,21.2,5.77,1.77], [20260908,2607,0.9894,0.0,0.9674,0.0146,41.8,13.01,41.6,0.047,1.51,20.4,6.53,1.81], [20260909,2168,0.9904,0.0,0.9758,0.0128,40.91,12.87,40.86,0.043,1.45,20.4,6.01,1.53], [20260910,2124,0.9888,0.0,0.9767,0.0154,41.37,11.79,41.4,0.05,1.11,21.73,6.62,1.47], [20260911,2232,0.9889,0.0,0.9805,0.0089,40.66,11.75,40.59,0.033,1.3,20.72,6.68,1.58], [20260912,2447,0.9879,0.0,0.9532,0.0325,41.5,11.8,41.01,0.039,1.33,20.67,7.05,1.49], [20260913,2914,0.9891,0.0,0.9664,0.0141,41.26,11.83,41.03,0.04,1.54,20.7,6.83,1.22], [20260914,2504,0.9882,0.0,0.9641,0.0128,41.7,12.3,41.69,0.041,1.26,21.88,6.12,1.26], [20260915,2505,0.9925,0.0,0.9746,0.0216,41.37,12.45,41.06,0.043,1.26,20.73,6.53,1.38], [20260916,2529,0.9918,0.0,0.9702,0.0141,41.52,12.76,41.41,0.052,1.17,21.04,6.34,1.27], [20260917,2397,0.9864,0.0036,0.979,0.0076,40.12,39.63,12.57,0.049,1.27,19.7,6.23,1.4], [20260918,2784,0.9886,0.0028,0.9759,0.0096,41.17,40.72,12.81,0.054,1.22,20.15,6.66,1.32], [20260919,3701,0.9925,0.0027,0.9633,0.0227,41.87,41.27,12.64,0.056,1.26,20.8,6.72,1.28], [20260920,3382,0.99,0.0038,0.9549,0.0222,42.35,41.59,13.02,0.046,1.37,20.89,6.49,1.32], [20260921,3174,0.9879,0.0031,0.9605,0.0246,41.56,40.74,12.46,0.054,1.44,20.11,6.88,1.3], [20260922,2848,0.992,0.0017,0.9812,0.0158,41.33,40.93,12.33,0.056,1.51,20.53,6.66,1.46], [20260923,3077,0.9872,0.0019,0.9493,0.0274,42.07,41.6,12.73,0.057,1.45,21.48,6.04,1.28], [20260924,3474,0.9839,0.0033,0.9213,0.0777,42.78,41.14,11.99,0.057,1.52,21.86,6.1,1.36], [20260925,3392,0.9869,0.0028,0.8976,0.1385,45.36,43.7,13.23,0.043,2.39,22.68,5.68,1.27], [20260926,3666,0.9908,0.0027,0.9435,0.0236,42.48,41.62,12.27,0.037,1.45,22.47,5.54,1.54]]
+};
 
 function fmtPct(v, d) {
   d = d || 2;
@@ -163,7 +173,7 @@ function renderKPIs() {
   document.getElementById('kpiRow').innerHTML = html;
 }
 
-function renderTable(bodyId) {
+function renderMTDTable() {
   var html = '';
   mtdData.forEach(function(row, i) {
     var isSummary = i >= mtdData.length - 1;
@@ -186,12 +196,87 @@ function renderTable(bodyId) {
     html += '<td>' + fmtTime(row[13]) + '</td>';
     html += '</tr>';
   });
-  document.getElementById(bodyId).innerHTML = html;
+  document.getElementById('mtdBody').innerHTML = html;
+}
+
+function initStationSelector() {
+  var sel = document.getElementById('stationSelect');
+  var stations = Object.keys(dailyData);
+  if (stations.length === 0) {
+    sel.innerHTML = '<option>暂无日维度数据</option>';
+    return;
+  }
+  stations.sort(function(a, b) {
+    var da = dailyData[a], db = dailyData[b];
+    var sa = da.reduce(function(s, r) { return s + (r[1]||0); }, 0);
+    var sb = db.reduce(function(s, r) { return s + (r[1]||0); }, 0);
+    return sb - sa;
+  });
+  stations.forEach(function(s, i) {
+    var opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = s;
+    if (i === 0) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  showDaily();
+}
+
+function showDaily() {
+  var name = document.getElementById('stationSelect').value;
+  var rows = dailyData[name] || [];
+  document.getElementById('dailyHint').textContent = '共 ' + rows.length + ' 天数据';
+
+  // KPI row for selected station (latest day)
+  if (rows.length > 0) {
+    var latest = rows[rows.length - 1];
+    var kpis = [
+      { label: '最新日订单', value: fmtNum(latest[1]), unit: '单', cls: '' },
+      { label: '妥投率', value: fmtPct(latest[2]), unit: '', cls: latest[2] >= 0.98 ? 'good' : 'bad' },
+      { label: '物流责未妥投率', value: fmtPct(latest[3], 4), unit: '', cls: latest[3] <= 0.002 ? 'good' : 'bad' },
+      { label: '用户T准时率', value: fmtPct(latest[4]), unit: '', cls: latest[4] >= 0.95 ? 'good' : (latest[4] >= 0.90 ? 'warn' : 'bad') },
+      { label: '不完美订单率', value: fmtPct(latest[5]), unit: '', cls: latest[5] <= 0.05 ? 'good' : (latest[5] <= 0.10 ? 'warn' : 'bad') },
+      { label: '实际T时长', value: fmtTime(latest[6]), unit: '', cls: latest[6] <= 42 ? 'good' : (latest[6] <= 45 ? 'warn' : 'bad') },
+    ];
+    var kpiHtml = '';
+    kpis.forEach(function(k) {
+      kpiHtml += '<div class="kpi-card ' + k.cls + '"><div class="label">' + k.label + '</div><div class="value">' + k.value + '</div>' + (k.unit ? '<div class="unit">' + k.unit + '</div>' : '') + '</div>';
+    });
+    document.getElementById('dailyKpiRow').innerHTML = kpiHtml;
+  }
+
+  // Daily trend table (newest first)
+  var reversed = rows.slice().reverse();
+  var html = '';
+  reversed.forEach(function(row) {
+    var ds = String(row[0]);
+    var dateStr = ds.slice(0,4) + '-' + ds.slice(4,6) + '-' + ds.slice(6,8);
+    var dow = new Date(ds.slice(0,4), parseInt(ds.slice(4,6))-1, ds.slice(6,8)).getDay();
+    var isWeekend = [0,6].includes(dow);
+    var dowName = ['日','一','二','三','四','五','六'][dow];
+    html += '<tr' + (isWeekend ? ' style="background:#f0f7ff"' : '') + '>';
+    html += '<td style="font-weight:600">' + dateStr + ' 周' + dowName + '</td>';
+    html += '<td>' + fmtNum(row[1]) + '</td>';
+    html += '<td class="' + colorPct(row[2], false) + '">' + fmtPct(row[2]) + '</td>';
+    html += '<td class="' + colorPct(row[3], true) + '">' + fmtPct(row[3], 4) + '</td>';
+    html += '<td class="' + colorPct(row[4], false) + '">' + fmtPct(row[4]) + '</td>';
+    html += '<td class="' + colorPct(row[5], true) + '">' + fmtPct(row[5]) + '</td>';
+    html += '<td>' + fmtTime(row[6]) + '</td>';
+    html += '<td>' + fmtTime(row[7]) + '</td>';
+    html += '<td>' + fmtTime(row[8]) + '</td>';
+    html += '<td>' + fmtTime(row[9]) + '</td>';
+    html += '<td>' + fmtTime(row[10]) + '</td>';
+    html += '<td>' + fmtTime(row[11]) + '</td>';
+    html += '<td>' + fmtTime(row[12]) + '</td>';
+    html += '<td>' + fmtTime(row[13]) + '</td>';
+    html += '</tr>';
+  });
+  document.getElementById('dailyBody').innerHTML = html;
 }
 
 renderKPIs();
-renderTable('mtdBody');
-renderTable('fullBody');
+renderMTDTable();
+initStationSelector();
 </script>
 </body>
 </html>
