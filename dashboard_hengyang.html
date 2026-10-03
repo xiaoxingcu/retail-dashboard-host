@@ -50,7 +50,7 @@
 <div class="main-title">
   <div>
     <div>9月聚合送高校物流数据看板</div>
-    <div class="subtitle">数据截至 2026-09-29 | 9个衡阳聚合送站点</div>
+    <div class="subtitle">数据截至 2026-10-02 | 9个衡阳聚合送站点</div>
   </div>
   <div style="font-size:13px;opacity:0.8">淘宝闪购·城代业务运营</div>
 </div>
@@ -89,22 +89,32 @@
   </div>
 </div>
 
-<div class="footer">淘宝闪购·城代业务运营 · 高校聚合送物流质量看板 · 数据截至2026-09-29</div>
+<div class="footer">淘宝闪购·城代业务运营 · 高校聚合送物流质量看板 · 数据截至2026-10-02</div>
 </div>
 
 <script>
 const mtdData = [
-  ['蒸湘南华红湘站（聚合送）',1873,0.984517,0.0,0.943352,0.028,38.6,12.05,38.23,1.6,3.05,20.22,2.91,0.03],
-  ['石鼓环境生物学院站点（聚合送）',1668,0.981415,0.0,0.9429,0.0186,37.91,8.11,37.37,0.001,3.14,20.22,5.89,0.02],
-  ['蒸湘交通工程学院站（聚合送）',1208,0.990894,0.000828,0.823546,0.1349,49.1,21.0,49.05,0.001,2.36,14.12,11.57,0.04],
-  ['珠晖工学院站（聚合送）',113,null,null,null,null,null,null,null,null,null,null,null,null],
-  ['珠晖师范学院新校区站（聚合送）',72,null,null,null,null,null,null,null,null,null,null,null,null],
-  ['珠晖高铁学院站（聚合送）',58,null,null,null,null,null,null,null,null,null,null,null,null],
-  ['雁峰师范学院西校区站（聚合送）',13,null,null,null,null,null,null,null,null,null,null,null,null],
-  ['珠晖财经学院站（聚合送）',4,null,null,null,null,null,null,null,null,null,null,null,null],
+  ['蒸湘南华红湘站（聚合送）',893,0.987682,0.0,0.956143,0.028,38.04,9.91,37.69,2.009,4.83,19.81,3.15,0.03],
+  ['石鼓环境生物学院站点（聚合送）',216,0.981481,0.0,0.962963,0.0231,32.64,13.18,32.61,0.001,3.17,6.79,9.46,0.02],
+  ['蒸湘交通工程学院站（聚合送）',76,0.960526,0.0,0.934211,0.0526,31.34,14.55,31.31,0.001,2.33,3.88,10.55,0.02],
+  ['珠晖高铁学院站（聚合送）',33,null,null,null,null,null,null,null,null,null,null,null,null],
+  ['珠晖工学院站（聚合送）',24,null,null,null,null,null,null,null,null,null,null,null,null],
+  ['珠晖师范学院新校区站（聚合送）',14,null,null,null,null,null,null,null,null,null,null,null,null],
+  ['雁峰师范学院西校区站（聚合送）',3,null,null,null,null,null,null,null,null,null,null,null,null],
+  ['珠晖财经学院站（聚合送）',2,null,null,null,null,null,null,null,null,null,null,null,null],
   ['衡阳科技职业学院站（聚合送）',1,null,null,null,null,null,null,null,null,null,null,null,null],
 ];
-const dailyData = {};
+const dailyData = {
+  '蒸湘南华红湘站（聚合送）': [[20261002,893,0.987682,0.0,0.956143,0.028,38.04,9.91,37.69,2.009,4.83,19.81,3.15,0.03]],
+  '石鼓环境生物学院站点（聚合送）': [[20261002,216,0.981481,0.0,0.962963,0.0231,32.64,13.18,32.61,0.001,3.17,6.79,9.46,0.02]],
+  '蒸湘交通工程学院站（聚合送）': [[20261002,76,0.960526,0.0,0.934211,0.0526,31.34,14.55,31.31,0.001,2.33,3.88,10.55,0.02]],
+  '珠晖高铁学院站（聚合送）': [[20261002,33,null,null,null,null,null,null,null,null,null,null,null,null]],
+  '珠晖工学院站（聚合送）': [[20261002,24,null,null,null,null,null,null,null,null,null,null,null,null]],
+  '珠晖师范学院新校区站（聚合送）': [[20261002,14,null,null,null,null,null,null,null,null,null,null,null,null]],
+  '雁峰师范学院西校区站（聚合送）': [[20261002,3,null,null,null,null,null,null,null,null,null,null,null,null]],
+  '珠晖财经学院站（聚合送）': [[20261002,2,null,null,null,null,null,null,null,null,null,null,null,null]],
+  '衡阳科技职业学院站（聚合送）': [[20261002,1,null,null,null,null,null,null,null,null,null,null,null,null]]
+};
 
 function fmtPct(v, d) {
   d = d || 2;
